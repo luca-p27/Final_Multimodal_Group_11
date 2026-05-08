@@ -1,0 +1,27 @@
+\begin{table}[h!]
+\centering
+\caption{Graph analysis results per model, showing the number of solved species, where each edge concerning the node is a self-connection;
+                   the number of strong cliques (lower is better), number of edges in strong cliques (lower is better), maximum size of the strong cliques (lower is better), number of strongly connected components (higher is better),
+                   number of weakly connected components (higher is better), density (lower is better).}
+\begin{tabular}{p{2cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}}
+\hline
+\textbf{Model} & \textbf{Solved species} & \textbf{Strong cliques} & \textbf{Edges in strong cliques} & \textbf{Weights in strong cliques} & \textbf{Max size strong clique} & \textbf{Strong components} & \textbf{Weak components} & \textbf{Density} & \textbf{Correct Predictions}\\
+\hline
+Baseline & 0 & 4 & 16 & 31 & 3 & 1 & 1 & 0.044 & 1057\\
+Hex late & 3 & 13 & 42 & 69 & 3 & 9 & 4 & 0.039 & 1231\\
+Hex early & 1 & 9 & 26 & 41 & 3 & 10 & 2 & 0.038 & 1294\\
+Continent late & 0 & 5 & 10 & 15 & 2 & 8 & 1 & 0.035 & 1317\\
+Continent early & 0 & 7 & 14 & 21 & 2 & 13 & 1 & 0.035 & 1319\\
+Both early & 1 & 8 & 20 & 37 & 3 & 17 & 2 & 0.031 & 1470\\
+Both late & 1 & 9 & 22 & 28 & 3 & 15 & 2 & 0.032 & 1481\\
+Country early & 1 & 11 & 30 & 47 & 3 & 9 & 2 & 0.031 & 1490\\
+Country late & 1 & 6 & 16 & 23 & 3 & 15 & 2 & 0.031 & 1491\\
+Wrap early & 1 & 16 & 48 & 68 & 3 & 16 & 2 & 0.029 & 1572\\
+Raw early & 1 & 9 & 26 & 34 & 3 & 11 & 2 & 0.03 & 1592\\
+Raw late & 3 & 13 & 38 & 50 & 3 & 20 & 4 & 0.028 & 1614\\
+Sh early & 1 & 16 & 40 & 53 & 3 & 14 & 2 & 0.028 & 1634\\
+Wrap late & 1 & 9 & 22 & 29 & 3 & 19 & 3 & 0.028 & 1651\\
+Sh late & 2 & 10 & 32 & 40 & 3 & 25 & 4 & 0.027 & 1697\\
+\end{tabular}
+\label{tab:graph_analysis}
+\end{table}

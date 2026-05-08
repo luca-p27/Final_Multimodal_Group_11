@@ -1,0 +1,83 @@
+student_number = "s2801973"
+environment_name = ["multimodal_shite/"]
+
+
+DATASETS = ["CrypticBio-Common"]
+# DATASETS = ["CrypticBio-Common", "CrypticBio-CommonUnseen", "CrypticBio-Endangered", "CrypticBio-Invasive"]
+
+
+SEED = 42
+
+
+# --encoding all
+ENCODINGS = ["wrap", "raw", "sh", "hex", "None"]
+ENCODINGS_2 = ["geo_label"]
+GEO_MODES = ["country", "continent", "both"]
+# ENCODINGS = ["hex"]
+
+# GEO_ARGUMENTS = ["country", "continent", "both"]
+FUSION_TYPE = ["early", "late"]
+# FUSION_TYPE = ["late"]
+
+# Need separate for baseline & baseline+naive
+
+
+rule all:
+	input:
+		expand("/data/{student}/{dataset}/{encoding}/best_model_{encoding}_{fusion}.pth",
+			dataset=DATASETS,
+			encoding=ENCODINGS,
+			fusion=FUSION_TYPE,
+			student=student_number
+			),
+		expand("/data/{student}/{dataset}/{encoding}/{geo_mode}/best_model_{encoding}_{fusion}.pth",
+			dataset=DATASETS,
+			encoding=ENCODINGS_2,
+			fusion=FUSION_TYPE,
+			geo_mode=GEO_MODES,
+			student=student_number
+			)
+
+
+
+rule run_geomodels:
+    input:
+        "/data/s2801973/data/{dataset}_continent_local2.tsv"
+    output:
+        "/data/{student}/{dataset}/{encoding}/{geo_mode}/best_model_{encoding}_{fusion}.pth",
+        "/data/{student}/{dataset}/{encoding}/{geo_mode}/confusion_matrix_{encoding}_{fusion}.csv",
+        "/data/{student}/{dataset}/{encoding}/{geo_mode}/metrics_{encoding}_{fusion}.json",
+        "/data/{student}/{dataset}/{encoding}/{geo_mode}/per_class_metrics_{encoding}_{fusion}.csv",
+        "/data/{student}/{dataset}/{encoding}/{geo_mode}/test_predictions_{encoding}_{fusion}.csv"
+    wildcard_constraints:
+        dataset="|".join(DATASETS),
+        encoding="|".join(ENCODINGS_2),
+        fusion="|".join(FUSION_TYPE),
+        geo_mode="|".join(GEO_MODES),
+        student=student_number
+    shell:
+        """
+        source '/data/{wildcards.student}/{environment_name}/bin/activate'
+        CUDA_VISIBLE_DEVICES=5 torchrun --nproc_per_node=1 multimodal/Main.py --data_path {input} --top_n 0 --seed 42 --geo_mode {wildcards.geo_mode} --encoding {wildcards.encoding} --fusion {wildcards.fusion} --epochs 30 --out_dir /data/{wildcards.student}/{wildcards.dataset}/{wildcards.encoding}/{wildcards.geo_mode}/ --seed {SEED}
+        """
+
+
+rule run_analyses:
+    input:
+        "/data/s2801973/data/{dataset}_continent_local2.tsv"
+    output:
+        "/data/{student}/{dataset}/{encoding}/best_model_{encoding}_{fusion}.pth",
+        "/data/{student}/{dataset}/{encoding}/confusion_matrix_{encoding}_{fusion}.csv",
+        "/data/{student}/{dataset}/{encoding}/metrics_{encoding}_{fusion}.json",
+        "/data/{student}/{dataset}/{encoding}/per_class_metrics_{encoding}_{fusion}.csv",
+        "/data/{student}/{dataset}/{encoding}/test_predictions_{encoding}_{fusion}.csv"
+    wildcard_constraints:
+        dataset="|".join(DATASETS),
+        encoding="|".join(ENCODINGS),
+        fusion="|".join(FUSION_TYPE),
+        student=student_number
+    shell:
+        """
+        source '/data/{wildcards.student}/{environment_name}/bin/activate'
+        CUDA_VISIBLE_DEVICES=5 torchrun --nproc_per_node=1 multimodal/Main.py --data_path {input} --top_n 0 --seed 42 --encoding {wildcards.encoding} --fusion {wildcards.fusion} --epochs 30 --out_dir /data/{wildcards.student}/{wildcards.dataset}/{wildcards.encoding}/ --seed {SEED}
+        """
