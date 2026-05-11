@@ -1,20 +1,9 @@
 """
-Encoder.py — Geographic encoders.
+Encoder.py
 
-Two families:
-
-    Continuous (not nn.Module):
-        WrapEncoder   — sinusoidal encoding (Mac Aodha et al., 2019)        out_dim=4
-        RawEncoder    — normalised lat/lon                                  out_dim=2
-        SHEncoder     — real spherical harmonics (Russwurm et al., 2024)    out_dim=121
-        Each exposes .out_dim and .encode_batch(lats, lons) -> float32 Tensor (N, out_dim).
-        Used by Dataset to precompute geo vectors once at init time.
-
-    Discrete (learnable nn.Module):
-        HexGridEncoder   — H3 hexagonal grid, two resolution levels
-        GeoLabelEncoder  — country / continent categorical embeddings
-        Each exposes .out_dim, .forward(idx1, idx2), and .param_groups(lr).
-        Integer indices are precomputed in Dataset.__init__ using the helpers below.
+Continuous encoders (WrapEncoder, RawEncoder, SHEncoder) convert lat/lon to fixed
+vectors at dataset init time. Discrete encoders (HexGridEncoder, GeoLabelEncoder)
+are nn.Modules that learn embeddings from integer indices precomputed in Dataset.
 """
 
 import numpy as np

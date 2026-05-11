@@ -101,6 +101,8 @@ def parse_args():
     p.add_argument('--geo_mode', default='both',
                    choices=['country', 'continent', 'both'],
                    help='which label dimensions to embed (geo_label encoder)')
+    p.add_argument('--batch_size', type=int, default=32,
+                   help='DataLoader batch size')
     p.add_argument('--url_map', default=None,
                    help='path to url_to_path.csv from download_images.py; '
                         'auto-detected from common server/SSD locations if not set')
@@ -137,15 +139,10 @@ def split_df(df: pd.DataFrame, seed: int):
         stratify=temp['species'])
     return train, val, test
 
-run_counter = 0
 
 def make_loaders(train_df, val_df, test_df, encoder_type, label_enc,
                  batch_size, num_workers, image_cache, **ds_kwargs):
     """Build train/val/test DataLoaders for any encoder type."""
-    
-    global run_counter
-    run_counter +=  1
-    print("run_counter:" ,run_counter)
     pin = torch.cuda.is_available()
     def mk(df, tf):
         return CrypticBioDataset(df, encoder_type,
@@ -153,16 +150,6 @@ def make_loaders(train_df, val_df, test_df, encoder_type, label_enc,
                                  label_encoder=label_enc,
                                  image_cache=image_cache,
                                  **ds_kwargs)
-    a = mk(train_df, TRAIN_TF)
-    print("train", a.fuck_up_counter)
-    print("train", a.mini_fuck_up_counter)
-    b = mk(val_df, TRAIN_TF)
-    print("val", a.fuck_up_counter)
-    print("val", b.mini_fuck_up_counter)
-    c = mk(test_df, TRAIN_TF)
-    print("test", c.fuck_up_counter)
-    print("test", c.mini_fuck_up_counter)
-
     return (
         DataLoader(mk(train_df, TRAIN_TF), batch_size,
                    shuffle=True,  num_workers=num_workers, pin_memory=pin,
@@ -180,8 +167,6 @@ def save_results(out_dir, tag, label_enc, all_labels, all_preds,
                  all_probs, test_acc, extra: dict) -> dict:
     """Write predictions, per-class metrics, confusion matrix, and JSON summary."""
     os.makedirs(out_dir, exist_ok=True)
-
-    print("label_encoder", len(label_enc.inverse_transform(all_labels)))
 
     pd.DataFrame({
         'True_Species':      label_enc.inverse_transform(all_labels),
@@ -269,17 +254,12 @@ def run_experiment(encoder_type, fusion_type,
         print(f"  Country vocab  : {len(country_vocab)}")
         print(f"  Continent vocab: {len(continent_vocab)}")
 
-    is_cuda     = torch.cuda.is_available()
-    batch_size  = 32 if is_cuda else 16
     num_workers = 0
+    batch_size  = args.batch_size
 
     train_loader, val_loader, test_loader = make_loaders(
         train_df, val_df, test_df, encoder_type, label_enc,
         batch_size, num_workers, image_cache, **ds_kwargs)
-
-    print("train", len(train_loader.dataset))
-    print("val_loader", len(val_loader.dataset))
-    print("test_loader", len(test_loader.dataset))
 
     model = build_model(encoder_type, fusion_type, num_classes,
                         geo_dim=geo_dim, geo_encoder=geo_encoder_module)
@@ -310,7 +290,7 @@ def run_experiment(encoder_type, fusion_type,
         {'encoder': encoder_type, 'fusion': fusion_type, 'num_classes': num_classes},
     )
     print(f"\n  >> test_acc={test_acc:.2f}%  macro_f1={metrics['macro_f1']:.4f}")
-    return metrics, test_loader
+    return metrics
 
 
 def main():
@@ -381,7 +361,7 @@ def main():
 
     for enc in encodings:
         for ft in fusion_types:
-            m, test_loader = run_experiment(enc, ft,
+            m = run_experiment(enc, ft,
                                train_df, val_df, test_df, label_enc,
                                args, device, image_cache)
             if m:
@@ -390,9 +370,6 @@ def main():
     if not all_results:
         print("\nNo results to show.")
         return
-
-    print(len(test_loader.dataset))
-    print(test_df.shape)
 
     print(f"\n{'='*58}")
     print("Summary")

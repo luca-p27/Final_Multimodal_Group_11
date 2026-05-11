@@ -1,22 +1,11 @@
 """
-Dataset.py — Data loading
+Dataset.py
 
-CrypticBioDataset always returns (img, geo, label) where:
-    continuous encoders (wrap / raw / sh) : geo is float32 Tensor (geo_dim,)
-    discrete encoders   (hex / geo_label) : geo is int64  Tensor (2,)
-                                        col-0 = primary idx, col-1 = secondary idx
+CrypticBioDataset gives back (img, geo, label). Images are tried from local_path first,
+then downloaded from url and cached in memory. Samples with no image are dropped.
 
-Image loading priority:
-    1. local_path column
-    2. url column with HTTP download (cached to avoid re-downloading)
-    3. drop image if both fail
-
-Data loading helpers:
-    clean_metadata(df)    — drop rows with missing / invalid required fields
-    load_dataframe(path)  — read TSV or CSV, normalise species column, clean
-
-Subset selection:
-    pass top_n to load_dataframe() to keep only the N most common species.
+geo is float32 (geo_dim,) for continuous encoders or int64 (2,) for discrete ones.
+Pass top_n to load_dataframe() to keep only the N most common species.
 """
 
 import os
@@ -143,9 +132,6 @@ class CrypticBioDataset(Dataset):
         self.encoder_type = encoder_type
         self.transform    = transform
         self.image_cache  = image_cache if image_cache is not None else {}
-        self.mini_fuck_up_counter = 0
-        self.fuck_up_counter = 0
-
         if 'species' not in self.df.columns:
             self.df = self.df.copy()
             self.df['species'] = self.df['scientificName']
@@ -206,7 +192,6 @@ class CrypticBioDataset(Dataset):
             except Exception:
                 pass
 
-        self.mini_fuck_up_counter += 1
         # fall back to URL download, cached
         url = str(row.get('url', ''))
         if url in self.image_cache:
@@ -220,7 +205,6 @@ class CrypticBioDataset(Dataset):
                 return img
             except Exception:
                 pass
-        self.fuck_up_counter += 1
         return None  # caller will skip this sample
 
     def __getitem__(self, idx):

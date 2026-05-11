@@ -1,24 +1,9 @@
 """
-Model.py — Neural network architectures. 
+Model.py
 
-All model classes share the same forward interface:
-    forward(img, geo) -> logits (B, num_classes)
-
-    img : float32 Tensor (B, 3, 224, 224)
-    geo : depends on encoder family
-        continuous  -> float32 (B, geo_dim)
-        discrete    -> int64   (B, 2)   where col-0 = idx1, col-1 = idx2
-
-Models:
-    ContinuousGeoModel       — wrap / raw / sh, early fusion
-    ContinuousLateFusionModel — wrap / raw / sh, late fusion
-    DiscreteEarlyFusionModel — hex / geo_label, early fusion
-    DiscreteLateFusionModel  — hex / geo_label, late fusion
-
-All expose .param_groups(backbone_lr, head_lr) for AdamW with split LRs.
-
-Factory:
-  build_model(encoder_type, fusion_type, num_classes, *, geo_dim, geo_encoder)
+ResNet-50-based models for image + geo fusion. Early and late fusion variants exist
+for both continuous (wrap/raw/sh) and discrete (hex/geo_label) encoders. All expose
+forward(img, geo) -> logits and param_groups() for split backbone/head learning rates.
 """
 
 import torch
