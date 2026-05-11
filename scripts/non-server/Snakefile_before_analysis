@@ -19,7 +19,7 @@ rule country2continent:
 		"input/{dataset}_continent.tsv"
 	shell:
 		"""
-		python3 scripts/country2continent.py --input-file {input} --output-file {output}
+		python3 scripts/non-server/country2continent.py --input-file {input} --output-file {output}
 		"""
 
 rule lonlat2country:
@@ -29,5 +29,5 @@ rule lonlat2country:
 		"temp/{dataset}_country.tsv"
 	shell:
 		"""
-		julia scripts/lon-lat2country.jl --input-file {input} --output-file {output}
+		julia scripts/non-server/lon-lat2country.jl --input-file {input} --output-file {output}
 		"""

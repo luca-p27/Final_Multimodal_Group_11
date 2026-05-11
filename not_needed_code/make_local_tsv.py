@@ -2,14 +2,10 @@ from __future__ import annotations
 
 """
 make_local_tsv.py
------------------
-Koppelt de bestaande images in input/images/ aan de TSV
-en schrijft een nieuwe TSV met local_path kolom.
 
-Werkt omdat download_images.py de index als bestandsnaam gebruikt:
-    rij 0   -> 000000.jpg / 000000.jpeg
-    rij 1   -> 000001.jpg / 000001.jpeg
-    etc.
+Matches downloaded images to TSV rows by index (row 0 -> 000000.jpg, etc.) and
+writes a new TSV with a local_path column. Run this after download_images.py to
+give the training pipeline direct file paths instead of downloading on-the-fly.
 """
 
 import argparse
@@ -59,8 +55,7 @@ def main():
 
     df.to_csv(out_path, sep='\t', index=False)
     print(f"Saved   : {out_path}")
-    print(f"\nNext step:")
-    print(f"  python Hex_tuning.py --data_path {out_path}")
+    print(f"\nNext step: python Main.py --data_path {out_path}")
 
 
 if __name__ == '__main__':
