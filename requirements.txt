@@ -1,0 +1,11 @@
+torch
+torchvision
+numpy
+pandas
+scikit-learn
+Pillow
+scipy
+h3
+tqdm
+requests
+pycountry_convert

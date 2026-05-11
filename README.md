@@ -70,11 +70,11 @@ using Pkg; Pkg.add("Makie")
 ## Usage
 
 ```bash
-python Main.py --encoder raw --fusion early --epochs 3 --batch-size 32
+python Main.py --encoding raw --fusion early --epochs 3 --batch_size 32
 ```
 
-Encoder options: `raw`, `wrap`, `sh`, `hex`, `geo_label`
-Fusion options: `early`, `late`
+Encoding options: `raw`, `wrap`, `sh`, `hex`, `geo_label`
+Fusion options: `early`, `late`, `both`
 
 
 
@@ -106,18 +106,8 @@ and prediction generation.
 
 ### Utilities
 
-**`get_split.py`**
-Generates reproducible train/validation/test splits (70/15/15) with stratified
-sampling on species label, using random seed 42.
-
-**`make_local_tsv.py` and `download_images.py`**
-Together these prepare the local dataset from remote sources. `make_local_tsv.py`
-creates local TSV files and lookup tables; `download_images.py` downloads and
-caches images from the iNaturalist S3 bucket.
-
-**`inspect_dataset.py`**
-Tools for exploring dataset composition, class distributions, and geographic
-coverage.
+**`download_images.py`**
+Downloads and caches images from the iNaturalist S3 bucket.
 
 
 
@@ -126,21 +116,19 @@ coverage.
 
 ### Analysis Scripts
 
-**`Geographical_Baseline.py`**
-Baseline classifier using geographic information only (country/continent labels),
-without any image features. Establishes the lower bound on accuracy using location alone.
+**`geo_baseline.py`**
+Baseline classifier using geographic coordinates only (raw lat/lon), without any
+image features. Establishes the lower bound on accuracy using location alone.
 
-**`Cryptic_groups_SCGreen.py` & `Cryptic_groups_SCGreen2.py`**
-Analysis of cryptic species groupings derived from iNaturalist misidentification
-records. Investigates whether the model learns coherent representations for known
-cryptic species complexes.
+**`build_bidirectional_tsv.py` & `build_transitive_tsv.py`**
+Build bidirectional and transitive-closure versions of the cryptic species lookup
+TSV, derived from iNaturalist misidentification records.
 
-**`Connected_components.py`**
-Graph analysis on model predictions, computing connected components and confusion
-structure across species. Interprets predictions as a directed graph where edges
-represent classifier confusion.
+**`cryptic_graph_stats.py`**
+Analyzes connection patterns in the cryptic species lookup TSV graph, computing
+statistics such as degree distribution and bidirectionality across the three TSV variants.
 
-**`country2continent.py` & `lon-lat2country.jl`**
+**`add_continent.py` & `lon-lat2country.jl`**
 Utility functions for mapping GPS coordinates to country and continent labels.
 
 ### Visualisation
