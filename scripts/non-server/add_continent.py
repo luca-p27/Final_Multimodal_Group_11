@@ -10,21 +10,20 @@ Usage:
 """
 
 import argparse
-
 import pycountry_convert as pc
 
 
 INVALID_COUNTRY_NAMES = {
-    "Reunion":                          "Africa",
-    "Curacao":                          "South America",
+    "Reunion": "Africa",
+    "Curacao": "South America",
     "Bonaire, Saint Eustatius and Saba":"South America",
-    "Vatican":                          "Europe",
-    "Palestinian Territory":            "Asia",
-    "Kosovo":                           "Europe",
-    "Saint Barthelemy":                 "South America",
-    "U.S. Virgin Islands":              "South America",
-    "Sint Maarten":                     "South America",
-    "Saint Helena":                     "Africa",
+    "Vatican": "Europe",
+    "Palestinian Territory": "Asia",
+    "Kosovo": "Europe",
+    "Saint Barthelemy": "South America",
+    "U.S. Virgin Islands": "South America",
+    "Sint Maarten": "South America",
+    "Saint Helena": "Africa",
 }
 
 

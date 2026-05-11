@@ -120,18 +120,6 @@ and downstream analyses.
 
 ### Analysis Scripts
 
-**`geo_baseline.py`**
-Baseline classifier using geographic coordinates only (raw lat/lon), without any
-image features. Establishes the lower bound on accuracy using location alone.
-
-**`build_bidirectional_tsv.py` & `build_transitive_tsv.py`**
-Build bidirectional and transitive-closure versions of the cryptic species lookup
-TSV, derived from iNaturalist misidentification records.
-
-**`cryptic_graph_stats.py`**
-Analyzes connection patterns in the cryptic species lookup TSV graph, computing
-statistics such as degree distribution and bidirectionality across the three TSV variants.
-
 **`add_continent.py` & `lon-lat2country.jl`**
 Utility functions for mapping GPS coordinates to country and continent labels.
 
