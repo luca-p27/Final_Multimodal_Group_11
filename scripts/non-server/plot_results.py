@@ -1,12 +1,12 @@
 """
-downstreamfigures.py
+plot_results.py
 
 Generates all main and supplementary figures from model predictions and
 per-class metrics produced by Main.py. Reads from predictions/ and
 output/per_class_metrics/, writes PNGs and a LaTeX table to figures/.
 
 Usage:
-    python downstreamfigures.py
+    python plot_results.py
 """
 
 import os
