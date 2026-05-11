@@ -1,9 +1,5 @@
 
 
-DATASETS = ["CrypticBio-Common"]
-SEED = 42
-
-
 rule all:
 	input:
 		"plots/domination_matrix.pdf",
