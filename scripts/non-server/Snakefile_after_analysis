@@ -6,7 +6,16 @@ rule all:
 		"plots/inneighborhood_distribution.pdf",
 		"output/graph_stats.tex",
 		"output/comparison_baseline.tex",
-		"plots/movement_heatmap.pdf"
+		"plots/movement_heatmap.pdf",
+		"figures/main/fig1_model_overview.png",
+		"figures/main/fig2_calibration.png",
+		"figures/main/fig3_cryptic_analysis.png",
+		"figures/main/fig4_misclassification.png",
+		"figures/supplementary/supp_fig1_overall.png",
+		"figures/supplementary/supp_fig2_range_breadth.png",
+		"figures/supplementary/supp_fig3_taxon_heatmap.png",
+		"figures/supplementary/supp_table_results.tex"
+
 
 rule graph_analysis:
 	output:
@@ -25,4 +34,19 @@ rule analyses:
 	shell:
 		"""
 		julia scripts/non-server/analyses.jl --input-folder "predictions/" --output-folder "output/" --plots-folder "plots/" --cryptic-path "input/small_lookup_cryptic_group.tsv"
+		"""
+
+rule species_specific_analyses:
+	output:
+		"figures/main/fig1_model_overview.png",
+		"figures/main/fig2_calibration.png",
+		"figures/main/fig3_cryptic_analysis.png",
+		"figures/main/fig4_misclassification.png",
+		"figures/supplementary/supp_fig1_overall.png",
+		"figures/supplementary/supp_fig2_range_breadth.png",
+		"figures/supplementary/supp_fig3_taxon_heatmap.png",
+		"figures/supplementary/supp_table_results.tex"
+	shell:
+		"""
+		python3 scripts/non-server/plot_results.py
 		"""

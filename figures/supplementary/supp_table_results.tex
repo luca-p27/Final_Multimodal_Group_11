@@ -1,0 +1,37 @@
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llccccc}
+\toprule
+\textbf{Model} & \textbf{Fusion} & \textbf{Accuracy} & \textbf{Macro-P} & \textbf{Macro-R} & \textbf{Macro-F1} \\
+\midrule
+Baseline (img only)$^\dagger$ & — & 0.447 & 0.461 & 0.446 & 0.439 \\
+\midrule
+Geo (continent) & Early & \textbf{0.557} & 0.569 & \textbf{0.557} & 0.547 \\
+Geo (continent) & Late & 0.556 & \textbf{0.580} & 0.556 & \textbf{0.548} \\
+\midrule
+Geo (country) & Early & 0.629 & 0.642 & 0.629 & 0.622 \\
+Geo (country) & Late & \textbf{0.630} & \textbf{0.644} & \textbf{0.630} & \textbf{0.623} \\
+\midrule
+Geo (both) & Early & 0.621 & \textbf{0.639} & 0.621 & 0.612 \\
+Geo (both) & Late & \textbf{0.626} & 0.634 & \textbf{0.626} & \textbf{0.618} \\
+\midrule
+Raw & Early & 0.673 & 0.683 & 0.672 & 0.667 \\
+Raw & Late & \textbf{0.682} & \textbf{0.693} & \textbf{0.682} & \textbf{0.674} \\
+\midrule
+Wrap & Early & 0.664 & 0.669 & 0.664 & 0.654 \\
+Wrap & Late & \textbf{0.698} & \textbf{0.703} & \textbf{0.697} & \textbf{0.690} \\
+\midrule
+SH & Early & 0.690 & 0.694 & 0.690 & 0.682 \\
+SH & Late & \textbf{0.717} & \textbf{0.726} & \textbf{0.717} & \textbf{0.710} \\
+\midrule
+Hex & Early & \textbf{0.547} & \textbf{0.581} & \textbf{0.546} & \textbf{0.548} \\
+Hex & Late & 0.520 & 0.557 & 0.520 & 0.518 \\
+\midrule
+\multicolumn{2}{l}{\textit{Abs.\ gain over baseline (best model)}} & \textit{+0.263} & \textit{+0.265} & \textit{+0.270} & \textit{+0.270} \\
+\bottomrule
+\end{tabular}
+\caption*{ \textbf{Bold} = best per column within group. $^\dagger$ = image-only; all others use image + geographic modality.}
+\label{tab:results}
+\end{table}

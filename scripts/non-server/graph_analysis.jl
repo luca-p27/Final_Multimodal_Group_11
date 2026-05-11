@@ -25,7 +25,6 @@ function plot_domination_matrix(domination_matrix, model_prediction_data, plots_
 
     model_names = sort!([i for i in keys(domination_matrix)], by= x -> model_prediction_data[x]["num_correct"])
     model_names_labelled = [uppercasefirst(i) for i in model_names]
-    println(model_names)
 
     for (i, model_name) in enumerate(model_names)
         for (j, model_name2) in enumerate(model_names)
@@ -81,7 +80,6 @@ function get_domination_models(model_prediction_data)
             domination_matrix[leading_model][lagging_model] = score
         end
     end
-    println(domination_matrix)
     return domination_matrix
 end
 

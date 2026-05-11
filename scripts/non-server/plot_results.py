@@ -22,7 +22,7 @@ os.makedirs(FIG_SUPP, exist_ok=True)
 # Paths to input data and model outputs
 OCCURRENCE  = os.path.join(ROOT, "input", "CrypticBio-Common_continent.tsv")
 CRYPTIC_TSV = os.path.join(ROOT, "input", "small_lookup_cryptic_group.tsv")
-BASE = os.path.join(ROOT, "output", "downstream")
+BASE = os.path.join(ROOT, "output", "downstream/")
 
 MODELS = {
     "Baseline":(f"{BASE}Baseline/per_class_metrics.csv", f"{BASE}Baseline/test_predictions.csv", "Baseline"),
