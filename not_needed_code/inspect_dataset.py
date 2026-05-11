@@ -1,3 +1,11 @@
+"""
+inspect_dataset.py
+
+Sanity-check script for the dataset before training. Prints species distribution,
+geographic column availability, split quality, stratification deviation, and image
+availability via url_map. Saves the three splits to split_inspection/.
+"""
+
 import argparse
 import os
 import numpy as np
@@ -16,7 +24,6 @@ def parse_args():
     return p.parse_args()
 
 def split_df(df: pd.DataFrame, seed: int):
-    """Identical to Main.py split function"""
     train, temp = train_test_split(
         df, test_size=0.3, random_state=seed,
         stratify=df['species'])

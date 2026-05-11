@@ -1,23 +1,10 @@
 """
-Main.py
+get_split.py
 
-Runs one or more encoder x fusion combinations, saves all results to --out_dir.
+Splits the dataset and saves the train/test CSVs to disk.
 
-Usage examples:
-    python Main.py                                        # all encoders, top-10, 3 epochs
-    python Main.py --encoding wrap                        # single encoder
-    python Main.py --encoding wrap --fusion both          # early + late
-    python Main.py --encoding wrap,sh,hex --fusion both   # multiple encoders
-    python Main.py --encoding all --top_n 0 --epochs 20  # full dataset, all encoders
-
-Available encoders : wrap  raw  sh  hex  geo_label
-    wrap / raw / sh  -> continuous, supports --fusion early | late | both
-    hex / geo_label  -> discrete,   supports --fusion early | late | both
-
-geo_label options:
-    --geo_mode country     embed only country
-    --geo_mode continent   embed only continent
-    --geo_mode both        embed both (default)
+Usage:
+    python get_split.py --data_path input/CrypticBio-Common_continent.tsv
 """
 
 import argparse
