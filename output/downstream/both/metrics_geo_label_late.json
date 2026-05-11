@@ -1,0 +1,10 @@
+{
+  "encoder": "geo_label",
+  "fusion": "late",
+  "num_classes": 158,
+  "test_accuracy": 0.6257,
+  "macro_f1": 0.6178,
+  "weighted_f1": 0.6179,
+  "macro_precision": 0.6335,
+  "macro_recall": 0.6256
+}

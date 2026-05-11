@@ -1,0 +1,2 @@
+encoder,fusion,num_classes,test_accuracy,macro_f1,weighted_f1,macro_precision,macro_recall
+geo_label,late,158,0.6257,0.6178,0.6179,0.6335,0.6256
