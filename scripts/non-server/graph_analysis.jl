@@ -347,7 +347,7 @@ end
 function parse_arguments()
 	#=
 	Parses arguments
-	requires both an input and output file.
+	requires an input, output and plots folder
 	=#
 	s = ArgParseSettings()
 	@add_arg_table s begin

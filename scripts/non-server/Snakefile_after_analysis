@@ -1,0 +1,32 @@
+
+
+DATASETS = ["CrypticBio-Common"]
+SEED = 42
+
+
+rule all:
+	input:
+		"plots/domination_matrix.pdf",
+		"plots/inneighborhood_distribution.pdf",
+		"output/graph_stats.tex",
+		"output/comparison_baseline.tex",
+		"plots/movement_heatmap.pdf"
+
+rule graph_analysis:
+	output:
+		"plots/domination_matrix.pdf",
+		"plots/inneighborhood_distribution.pdf",
+		"output/graph_stats.tex"
+	shell:
+		"""
+		julia scripts/non-server/graph_analysis.jl --input-folder "predictions/" --output-folder "output/" --plots-folder "plots/"
+		"""
+
+rule analyses:
+	output:
+		"output/comparison_baseline.tex",
+		"plots/movement_heatmap.pdf"
+	shell:
+		"""
+		julia scripts/non-server/analyses.jl --input-folder "predictions/" --output-folder "output/" --plots-folder "plots/" --cryptic-path "input/small_lookup_cryptic_group.tsv"
+		"""

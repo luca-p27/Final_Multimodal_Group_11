@@ -1,17 +1,20 @@
 try 
     using CairoMakie
     using HypothesisTests
+    using ArgParse
 catch
     import Pkg
     Pkg.add("CairoMakie")
     Pkg.add("HypothesisTests")
+    Pkg.add("ArgParse")
 finally 
     using CairoMakie
     using HypothesisTests
+    using ArgParse
 end
 
 
-function create_movement_heatmap(model_prediction_data)
+function create_movement_heatmap(model_prediction_data, plots_folder)
     #=
     Plots movement data comparison with baseline as a heatmap
     =#
@@ -53,11 +56,11 @@ function create_movement_heatmap(model_prediction_data)
     ax.xlabel = "Prediction of species compared to baseline"
     ax.ylabel = "Model"
     # ax.title = "All possible prediction changes by adding locating data, comparing all fusion models with the baseline"
-    save("plots/movement_heatmap.pdf", fig)
+    save("$(plots_folder)/movement_heatmap.pdf", fig)
 
 end
 
-function create_movement_table(model_prediction_data)
+function create_movement_table(model_prediction_data, output_folder)
     #=
     Creates the specific latex table used in the report for the different possible movements
     concerning the predictions between the baseline and the different fusion models.
@@ -92,7 +95,7 @@ function create_movement_table(model_prediction_data)
                 raw"\end{table}"], '\n')
     table_str = table_begin * str_lines * table_end
 
-    out_file = open("output/comparison_baseline.tex", "w")
+    out_file = open("$(output_folder)/comparison_baseline.tex", "w")
     write(out_file, table_str)
     close(out_file)
 
@@ -225,9 +228,44 @@ function get_cryptic_groups(filename)
     return cryptic_lookup
 end
 
+function parse_arguments()
+	#=
+	Parses arguments
+	requires an input, output and plots folder
+	=#
+	s = ArgParseSettings()
+	@add_arg_table s begin
+		"--input-folder"
+			arg_type = String
+			help = "Fullpath filename of the input folder"
+			required = true
+		"--output-folder"
+			arg_type = String
+			help = "Fullpath filename of the output folder"
+			required = true
+		"--plots-folder"
+			arg_type = String
+			help = "Fullpath filename of the plots folder"
+			required = true
+        "--cryptic-path"
+			arg_type = String
+			help = "Fullpath name to the cryptic look-up table"
+			required = true
+	end
+	return parse_args(s)
+end
+
+
+
 function main()
-    main_folder = "predictions/"
-    cryptic_filename = "input/small_lookup_cryptic_group.tsv"
+    args = parse_arguments()
+    
+    main_folder = args["input-folder"]
+    output_folder = args["output-folder"]
+    plots_folder = args["plots-folder"]
+
+    cryptic_filename = args["cryptic-path"]
+    
     cryptic_lookup = get_cryptic_groups(cryptic_filename)
     rename = Dict("None late" => "Baseline", "None early" => "Baseline")
 
@@ -286,8 +324,8 @@ function main()
     # plot_confidence_predictions(model_prediction_data)
 
     compare_with_baseline(model_prediction_data, cryptic_lookup)
-    create_movement_table(model_prediction_data)
-    create_movement_heatmap(model_prediction_data)
+    create_movement_table(model_prediction_data, output_folder)
+    create_movement_heatmap(model_prediction_data, plots_folder)
 end
 
 main()
