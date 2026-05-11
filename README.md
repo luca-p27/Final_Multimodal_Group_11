@@ -6,13 +6,9 @@ on the CrypticBio-Common benchmark.
 
 ## Overview
 
-Cryptic species morphologically similar organisms that are biologically distinct present a significant challenge for automated classification, as standard 
-vision-only models rely on visual discriminability that is by definition weak for these taxa. This project investigates whether geographic context can close that gap.
+Cryptic species morphologically similar organisms that are biologically distinct present a significant challenge for automated classification, as standard vision-only models rely on visual discriminability that is by definition weak for these taxa. This project investigates whether geographic context can close that gap.
 
-The core hypothesis follows from allopatric divergence theory: cryptic species that share morphology frequently occupy non-overlapping ranges, meaning geographic 
-location carries discriminative signal that image features cannot. The pipeline augments a ResNet-50 backbone with five geographic encodings under two fusion 
-strategies, evaluated on the **CrypticBio-Common benchmark**: 158 cryptic species drawn from seven taxonomic classes (Aves, Insecta, Arachnida, Squamata, Gastropoda, 
-Magnoliopsida, Agaricomycetes), with 15,801 georeferenced observations spanning a near-global range.
+The core hypothesis follows from allopatric divergence theory: cryptic species that share morphology frequently occupy non-overlapping ranges, meaning geographic  location carries discriminative signal that image features cannot. The pipeline augments a ResNet-50 backbone with five geographic encodings under two fusion strategies, evaluated on the **CrypticBio-Common benchmark**: 158 cryptic species drawn from seven taxonomic classes (Aves, Insecta, Arachnida, Squamata, Gastropoda, Magnoliopsida, Agaricomycetes), with 15,801 georeferenced observations spanning a near-global range.
 
 ## Requirements
 
@@ -37,8 +33,8 @@ Magnoliopsida, Agaricomycetes), with 15,801 georeferenced observations spanning 
 ### Clone and Setup Python Environment
 
 ```bash
-git clone https://github.com/NessInMorse/Minimum_Multimodal_Assignment
-cd Minimum_Multimodal_Assignment
+git clone https://github.com/luca-p27/Final_Multimodal_Group_11.git
+cd Final_Multimodal_Group_11
 ```
 
 ### Install Dependencies
@@ -70,11 +66,15 @@ using Pkg; Pkg.add("Makie")
 ## Usage
 
 ```bash
+cd scripts/server
 python Main.py --encoding raw --fusion early --epochs 3 --batch_size 32
 ```
 
 Encoding options: `raw`, `wrap`, `sh`, `hex`, `geo_label`
 Fusion options: `early`, `late`, `both`
+
+For `geo_label` encoding, the `--geo_mode` flag controls which embeddings are used:
+`--geo_mode country|continent|both` (default: `both`)
 
 
 
@@ -109,6 +109,10 @@ and prediction generation.
 **`download_images.py`**
 Downloads and caches images from the iNaturalist S3 bucket.
 
+**`Snakefile`** (`scripts/server/`)
+Orchestrates the full server-side pipeline: runs all encoder x fusion combinations
+and downstream analyses.
+
 
 
 
@@ -131,7 +135,16 @@ statistics such as degree distribution and bidirectionality across the three TSV
 **`add_continent.py` & `lon-lat2country.jl`**
 Utility functions for mapping GPS coordinates to country and continent labels.
 
+**`Snakefile`** (`scripts/non-server/`)
+Orchestrates the non-server analysis pipeline: runs `lon-lat2country.jl` and
+`add_continent.py` to produce annotated coordinate files.
+
 ### Visualisation
+
+**`plot_results.py`**
+Generates all main and supplementary figures from model predictions and per-class
+metrics produced by `Main.py`. Reads from `predictions/` and
+`output/per_class_metrics/`, writes PNGs and a LaTeX table to `figures/`.
 
 **`worldmap.R`**
 Geographic distribution visualisations per taxonomic class.
@@ -208,7 +221,6 @@ geographic metadata, examining whether gains are largest for species whose crypt
 congeners occupy non-overlapping ranges.
 
 ## Acknowledgements
-
 This work uses the CrypticBio-Common benchmark and builds on:
 - ResNet-50 backbone via torchvision
 - Spherical harmonics via scipy
