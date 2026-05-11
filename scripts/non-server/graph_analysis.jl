@@ -1,8 +1,22 @@
-using Graphs
-using SimpleWeightedGraphs
-using CairoMakie
+try
+    using Graphs
+    using SimpleWeightedGraphs
+    using CairoMakie
+	using ArgParse
+catch
+	using Pkg
+	Pkg.add("Graphs")
+    Pkg.add("SimpleWeightedGraphs")
+    Pkg.add("CairoMakie")
+    Pkg.add("ArgParse")
+finally
+    using Graphs
+    using SimpleWeightedGraphs
+    using CairoMakie
+	using ArgParse
+end
 
-function plot_domination_matrix(domination_matrix, model_prediction_data)
+function plot_domination_matrix(domination_matrix, model_prediction_data, plots_folder)
     #=
     Plots the domination matrix in pdf format.
     =#
@@ -34,7 +48,7 @@ function plot_domination_matrix(domination_matrix, model_prediction_data)
     ax.xlabel = "Dominated"
     ax.ylabel = "Dominating"
     ax.title = "Domination matrix (n=$(length(model_prediction_data["Baseline"]["is_correct_list"])))"
-    save("plots/domination_matrix.pdf", fig)
+    save("$(plots_folder)/domination_matrix.pdf", fig)
 end
 
 
@@ -72,7 +86,7 @@ function get_domination_models(model_prediction_data)
 end
 
 
-function plot_inneighborhood(model_prediction_data)
+function plot_inneighborhood(model_prediction_data, plots_folder)
     #=
     Plots the in-neighborhood of mistakes for each of the models in the dataset.
     as a scatterplot with a unique marker per unique location encoding
@@ -139,7 +153,7 @@ function plot_inneighborhood(model_prediction_data)
     vlines!(14, ymin=0.0, ymax=100, linestyle=:dash, color=:gray)
 
     f[1, 2] = Legend(f, ax, "Models", framevisible=false)
-    save("plots/inneighborhood_distribution.pdf", f)
+    save("$(plots_folder)/inneighborhood_distribution.pdf", f)
 end
 
 
@@ -181,7 +195,7 @@ function get_number_of_connections_in_cliques(n)
     return n * (n - 1)
 end
 
-function save_textab(model_prediction_data)
+function save_textab(model_prediction_data, output_folder)
     table_begin = join([raw"\begin{table}[h!]",
                    raw"\centering",
                    raw"\caption{Graph analysis results per model, showing the number of solved species, where each edge concerning the node is a self-connection;
@@ -221,7 +235,7 @@ function save_textab(model_prediction_data)
                 raw"\end{table}"], '\n')
     table_str = table_begin * str_lines * table_end
 
-    out_file = open("output/graph_stats.tex", "w")
+    out_file = open("$(output_folder)/graph_stats.tex", "w")
     write(out_file, table_str)
     close(out_file)
 end
@@ -330,8 +344,38 @@ function open_as_graph(filename)
     return g, species_id, species_id_inv, edge_dict, counter, is_correct_list, confidence_list
 end
 
+function parse_arguments()
+	#=
+	Parses arguments
+	requires both an input and output file.
+	=#
+	s = ArgParseSettings()
+	@add_arg_table s begin
+		"--input-folder"
+			arg_type = String
+			help = "Fullpath filename of the input folder"
+			required = true
+		"--output-folder"
+			arg_type = String
+			help = "Fullpath filename of the output folder"
+			required = true
+		"--plots-folder"
+			arg_type = String
+			help = "Fullpath filename of the plots folder"
+			required = true
+	end
+	return parse_args(s)
+end
+
+
+
+
 function main()
-    main_folder = "predictions/"
+    args = parse_arguments()
+
+    main_folder = args["input-folder"]
+    output_folder = args["output-folder"]
+    plots_folder = args["plots-folder"]
 
     rename = Dict("None late" => "Baseline", "None early" => "Baseline")
 
@@ -385,9 +429,9 @@ function main()
             end
         end
     end
-    save_textab(model_prediction_data)
-    plot_inneighborhood(model_prediction_data)
+    save_textab(model_prediction_data, output_folder)
+    plot_inneighborhood(model_prediction_data, plots_folder)
     domination_matrix = get_domination_models(model_prediction_data)
-    plot_domination_matrix(domination_matrix, model_prediction_data)
+    plot_domination_matrix(domination_matrix, model_prediction_data, plots_folder)
 end
 main()
