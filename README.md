@@ -33,8 +33,8 @@ The core hypothesis follows from allopatric divergence theory: cryptic species t
 ### Clone and Setup Python Environment
 
 ```bash
-git clone https://github.com/luca-p27/Final_Multimodal_Group_11.git
-cd Final_Multimodal_Group_11
+git clone https://github.com/luca-p27/Final_Multimodal_Group_10.git
+cd Final_Multimodal_Group_10
 ```
 
 ### Install Dependencies
@@ -67,7 +67,7 @@ using Pkg; Pkg.add("Makie")
 
 ```bash
 cd scripts/server
-python Main.py --encoding raw --fusion early --epochs 3 --batch_size 32
+python Main.py --encoding raw --fusion early --epochs 30 --batch_size 32
 ```
 
 Encoding options: `raw`, `wrap`, `sh`, `hex`, `geo_label`
@@ -114,10 +114,6 @@ Orchestrates the full server-side pipeline: runs all encoder x fusion combinatio
 and downstream analyses.
 
 
-
-
-
-
 ### Analysis Scripts
 
 **`add_continent.py` & `lon-lat2country.jl`**
@@ -139,9 +135,6 @@ Geographic distribution visualisations per taxonomic class.
 
 **`analyses.jl` and `graph_analysis.jl`**
 Julia scripts for graph analysis and Makie visualisations.
-
-
-
 
 
 ## Geographic Encodings
