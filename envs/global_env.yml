@@ -1,0 +1,26 @@
+name: global_env
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.11
+  
+  - pytorch
+  - torchvision
+
+  - numpy
+  - pandas
+  - scikit-learn
+  - Pillow
+  - scipy=1.16 # 1.17 breaks sph_harm
+  - h3-py
+  - tqdm
+  - requests
+  - matplotlib
+  - seaborn
+  - importlib_metadata
+
+  # - pycountry_convert # is not available through conda :(
+
+  # Julia
+  - julia

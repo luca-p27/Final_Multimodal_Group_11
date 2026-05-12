@@ -27,7 +27,7 @@ function change_file_per_line(input_filename, output_filename)
 	in_counter = 0
 	for line in eachline(infile)
 		line = strip(line)
-		replace(line, ", " => '#')
+		line = replace(line, ", " => '#')
 		if !iszero(counter) && length(line) > 5
 			items = split(line, ',')
 			if length(items[5]) > 2 && length(items[6]) > 2
