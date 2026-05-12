@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 from torchvision import models
 
-from scripts.server.Encoder import CONTINUOUS_ENCODERS, DISCRETE_ENCODERS
+from Encoder import CONTINUOUS_ENCODERS, DISCRETE_ENCODERS
 
 IMG_FEAT_DIM = 2048  # ResNet-50 penultimate layer
 

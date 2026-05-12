@@ -39,16 +39,16 @@ from sklearn.preprocessing import LabelEncoder
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
-from scripts.server.Encoder import (
+from Encoder import (
     ALL_ENCODER_NAMES,
     CONTINUOUS_ENCODERS, DISCRETE_ENCODERS,
     HexGridEncoder, GeoLabelEncoder,
     build_continuous_encoder,
     build_hex_vocab, build_label_vocab,
 )
-from scripts.server.Model   import build_model
-from scripts.server.Dataset import CrypticBioDataset, load_dataframe, collate_skip_none
-from scripts.server.Train   import fit, evaluate
+from Model   import build_model
+from Dataset import CrypticBioDataset, load_dataframe, collate_skip_none
+from Train   import fit, evaluate
 
 _HERE         = os.path.dirname(os.path.abspath(__file__))
 _PROJECT_ROOT = os.path.abspath(os.path.join(_HERE, '..'))
@@ -87,7 +87,7 @@ def parse_args():
                    help='fusion strategy — applies to all encoder types')
     p.add_argument('--out_dir', default=OUT_DEFAULT,
                    help='directory where models and results are written')
-    p.add_argument('--epochs', type=int, default=30,
+    p.add_argument('--epochs', type=int, default=3,
                    help='maximum training epochs per run')
     p.add_argument('--patience', type=int, default=5,
                    help='early-stopping patience (epochs without val improvement)')

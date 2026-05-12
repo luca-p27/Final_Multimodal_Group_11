@@ -25,7 +25,7 @@ try:
 except ImportError:
     _HAS_REQUESTS = False
 
-from scripts.server.Encoder import (
+from Encoder import (
     CONTINUOUS_ENCODERS,
     latlon_to_hex_idx,
     label_to_idx,
