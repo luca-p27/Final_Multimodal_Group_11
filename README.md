@@ -208,6 +208,71 @@ from geographic fusion.
 geographic metadata, examining whether gains are largest for species whose cryptic
 congeners occupy non-overlapping ranges.
 
+## To run the scripts analyses
+- Make sure that an environment using the requirements.txt exists somewhere on the server.
+- And that the disk quota is not reached.
+- Ensure snakemake is installed like [detailed in the documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
+
+
+### Pre-analysis (optional, local, **Please do not attempt to do this on the server**)
+To reproduce the input file that is used `Snakefile_before_analysis` can be used as follows:
+Ensure that [Julia](https://julialang.org) is also installed besides the requirements in requirements.txt.
+Then run:
+
+```shell
+conda activate snakemake
+```
+
+```shell
+snakemake --snakefile scripts/non-server/Snakefile_before_analysis --cores 1
+```
+
+And everything should run accordingly
+
+### Running aNN models **(Use the server)**
+Same requirements needed as before, except for Julia, which can be omitted.
+
+make sure that `scripts/server/Snakefile` 
+- has the correct path for `main_folder`, which is the folder in which everything from the project is stored, i.e. it should end with /final_multimodal_group_11/.
+- has a correct filepath to the loaded environment that can be activated in the `environment_path` variable.
+- Points to a valid GPU in the `CUDA_VISIBLE_DEVICES=0` command which is used, verify using `btop` in the shell which GPU's are available.
+
+
+Then you are able to run the model using:
+```shell
+conda activate snakemake
+```
+And then running (with sufficiently many cores for downloading the images):
+```shell
+snakemake --snakefile "scripts/server/Snakefile" --cores 20 --resources gpu=1
+```
+
+In cases where you need to rerun everything:
+```shell
+snakemake --snakefile "scripts/server/Snakefile" --cores 20 --resources gpu=1 --forceall
+```
+
+### Downstream analyses (can be done locally) 
+Though normally a little manual work is needed, since `None_early` and `None_late` are actually the Baseline.
+The right files are already in the repo that you have downloaded, to run the analyses on these results, you can perform:
+
+Make sure to run from the main directory in the repo (the layer of this README)
+
+```shell
+conda activate snakemake
+```
+
+```shell
+snakemake --snakefile "scripts/non-server/Snakefile_after_analysis" --cores 3 --forceall
+```
+
+(--forceall in this case to force it to run, since everything is already there)
+
+
+
+
+
+
 ## Acknowledgements
 This work uses the CrypticBio-Common benchmark and builds on:
 - ResNet-50 backbone via torchvision
