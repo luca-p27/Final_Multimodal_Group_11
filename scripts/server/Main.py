@@ -87,7 +87,7 @@ def parse_args():
                    help='fusion strategy — applies to all encoder types')
     p.add_argument('--out_dir', default=OUT_DEFAULT,
                    help='directory where models and results are written')
-    p.add_argument('--epochs', type=int, default=3,
+    p.add_argument('--epochs', type=int, default=30,
                    help='maximum training epochs per run')
     p.add_argument('--patience', type=int, default=5,
                    help='early-stopping patience (epochs without val improvement)')
