@@ -18,7 +18,7 @@ end
 
 function get_label(m)
 	m = replace(m, "late" => "(L)")
-	m = replace(m, "early" => "(L)")
+	m = replace(m, "early" => "(E)")
 	m = replace(m, "sh" => "SH")
 	m = replace(m, "both" => "Geo_both")
 	m = replace(m, "continent" => "Geo_continent")
