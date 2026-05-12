@@ -206,6 +206,8 @@ congeners occupy non-overlapping ranges.
 - And that the disk quota is not reached.
 - Ensure snakemake is installed like [detailed in the documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
 
+Analyses can be run from within a screen or tmux session.
+
 
 ### Pre-analysis (optional, local, **Please do not attempt to do this on the server**)
 To reproduce the input file that is used `Snakefile_before_analysis` can be used as follows:
