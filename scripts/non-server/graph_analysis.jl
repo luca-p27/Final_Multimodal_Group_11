@@ -88,10 +88,6 @@ function get_domination_models(model_prediction_data)
 
                 if isone(prediction_value_lead) && iszero(prediction_value_lag)
                     score += 1
-                elseif isone(prediction_value_lead) && isone(prediction_value_lag) && (confidence_lead > confidence_lag)
-                    # score += 1
-                elseif iszero(prediction_value_lead) && iszero(prediction_value_lag) && (confidence_lead < confidence_lag)
-                    # score += 1
                 end
             end
             if isnothing(get(domination_matrix, leading_model, nothing))

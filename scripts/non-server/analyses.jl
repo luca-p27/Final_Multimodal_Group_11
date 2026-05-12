@@ -71,11 +71,8 @@ function create_movement_heatmap(model_prediction_data, plots_folder)
             color = txtcolor, align = (:center, :center))
     end
     Colorbar(fig[1, 2], hmap, width = 15, ticksize = 15)
-    # ax.xticklabelrotation = π / 3
-    # ax.xticklabelalign = (:right, :center)
     ax.xlabel = "Prediction of species compared to baseline"
     ax.ylabel = "Model"
-    # ax.title = "All possible prediction changes by adding locating data, comparing all fusion models with the baseline"
     save("$(plots_folder)/movement_heatmap.pdf", fig)
 
 end
@@ -147,7 +144,6 @@ function compare_with_baseline(model_prediction_data, cryptic_lookup)
         model_prediction_data[model]["CIO_list"] = CIO_list
     end
 
-    # movement_options = ["CC", "CI", "CO", "IC", "II", "IO", "OC", "OI", "OO"]
     freq_dict = Dict()
 
     for model in keys(model_prediction_data)
@@ -182,7 +178,6 @@ function plot_confidence_predictions(model_prediction_data)
 	)
     sequence = sort!([i for i in keys(model_prediction_data)], by=k -> sum(model_prediction_data[k]["categories"]))
     for (index, model) in enumerate(sequence)
-        # colors = [color_options[index] for _ in model_prediction_data[model]["categories"]]
         boxplot!(model_prediction_data[model]["categories"] .+ 2 * Float64(index - 1), model_prediction_data[model]["values"], label = model)
     end
     f[1, 2] = Legend(f[1, 2], ax, "Model used", framevisible = false)
@@ -313,18 +308,6 @@ function main()
                 avg_not_cryptic = sum(tempi_1 .* cryptic_values) / length(tempi_1)
 
                 avg_cryptic = sum(cryptic_categories .* cryptic_values) / sum(cryptic_categories)
-                # println("----------")
-                # println("----------")
-                # println("$(model_name) mistakes")
-                # println("------")
-                # println("Avg confidence NOT cryptic: $(avg_not_cryptic) (n=$(sum(tempi_1)))")
-                # println("Avg confidence cryptic: $(avg_cryptic) (n=$(sum(cryptic_categories)))")
-
-                # X = collect(filter(!iszero, (tempi_1 .* cryptic_values)))
-                # Y = collect(filter(!iszero,(cryptic_categories .* cryptic_values)))
-                # println(pvalue(MannWhitneyUTest(X, Y)))
-                # println("----------")
-                # println("----------")
                 model_prediction_data[model_name] = Dict()
                 model_prediction_data[model_name]["categories"] = categories
                 model_prediction_data[model_name]["values"] = values
@@ -337,12 +320,6 @@ function main()
     end
 
     
-
-    # println(maximum(values[iszero.(categories)]))
-    # color_options = ["#648fff", "#4e3ab3", "#dc267f", "#fe6100", "#ffb000", "#ffffff", "#7d7c7c"]
-
-
-    # plot_confidence_predictions(model_prediction_data)
 
     compare_with_baseline(model_prediction_data, cryptic_lookup)
     create_movement_table(model_prediction_data, output_folder)

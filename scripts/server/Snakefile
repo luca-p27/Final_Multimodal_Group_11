@@ -4,23 +4,16 @@ environment_path = "/data/s2801973/multimodal_shite"
 
 
 DATASETS = ["CrypticBio-Common"]
-# DATASETS = ["CrypticBio-Common", "CrypticBio-CommonUnseen", "CrypticBio-Endangered", "CrypticBio-Invasive"]
 
 
 SEED = 42
 
 
-# --encoding all
 ENCODINGS = ["wrap", "raw", "sh", "hex", "None"]
 ENCODINGS_2 = ["geo_label"]
 GEO_MODES = ["country", "continent", "both"]
-# ENCODINGS = ["hex"]
 
-# GEO_ARGUMENTS = ["country", "continent", "both"]
 FUSION_TYPE = ["early", "late"]
-# FUSION_TYPE = ["late"]
-
-# Need separate for baseline & baseline+naive
 
 
 rule all:

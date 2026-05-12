@@ -245,6 +245,8 @@ In cases where you need to rerun everything:
 snakemake --snakefile "scripts/server/Snakefile" --cores 20 --resources gpu=1 --forceall
 ```
 
+In case an error occurs when importing `sph_harm`, consider using `scipy=1.16` in the requirements instead, since this function is deprecated since [scipy 1.17](https://docs.scipy.org/doc/scipy/release/1.17.0-notes.html)
+
 ### Downstream analyses (can be done locally) 
 Though normally a little manual work is needed, since `None_early` and `None_late` are actually the Baseline.
 The right files are already in the repo that you have downloaded, to run the analyses on these results, you can perform:
@@ -260,10 +262,6 @@ snakemake --snakefile "scripts/non-server/Snakefile_after_analysis" --cores 3 --
 ```
 
 (--forceall in this case to force it to run, since everything is already there)
-
-
-
-
 
 
 ## Acknowledgements
