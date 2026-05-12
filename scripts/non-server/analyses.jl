@@ -90,7 +90,8 @@ function create_movement_table(model_prediction_data, output_folder)
 
 
    for model in sequence
-        str_line = "$(model) & " * join([get(model_prediction_data[model]["movements"], mov_option, 0) for mov_option in movement_options], " & ")
+		model_label = uppercasefirst(get_label(model))
+        str_line = "$(model_label) & " * join([get(model_prediction_data[model]["movements"], mov_option, 0) for mov_option in movement_options], " & ")
         str_line *= raw"\\\\"
         str_line = uppercasefirst(str_line)
         push!(lines, str_line)

@@ -230,7 +230,9 @@ function save_textab(model_prediction_data, output_folder)
                 "nr_weakly_component",
                 "density",
                 "num_correct"]
-        str_line = "$(model) & " * join([model_prediction_data[model][key] for key in keys], " & ")
+		model_label = uppercasefirst(get_label(model))
+
+        str_line = "$(model_label) & " * join([model_prediction_data[model][key] for key in keys], " & ")
         str_line *= raw"\\\\"
         str_line = uppercasefirst(str_line)
         push!(lines, str_line)
