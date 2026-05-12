@@ -33,8 +33,8 @@ The core hypothesis follows from allopatric divergence theory: cryptic species t
 ### Clone and Setup Python Environment
 
 ```bash
-git clone https://github.com/luca-p27/Final_Multimodal_Group_11.git
-cd Final_Multimodal_Group_11
+git clone https://github.com/luca-p27/Final_Multimodal_Group_10.git
+cd Final_Multimodal_Group_10
 ```
 
 ### Install Dependencies
