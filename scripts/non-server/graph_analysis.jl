@@ -16,6 +16,16 @@ finally
 	using ArgParse
 end
 
+function get_label(m)
+	m = replace(m, "late" => "(L)")
+	m = replace(m, "early" => "(L)")
+	m = replace(m, "sh" => "SH")
+	m = replace(m, "both" => "Geo_both")
+	m = replace(m, "continent" => "Geo_continent")
+	m = replace(m, "country" => "Geo_country")
+	return m
+end
+
 function plot_domination_matrix(domination_matrix, model_prediction_data, plots_folder)
     #=
     Plots the domination matrix in pdf format.
@@ -24,7 +34,7 @@ function plot_domination_matrix(domination_matrix, model_prediction_data, plots_
     domination_matrix_static = zeros(Int, m, m)
 
     model_names = sort!([i for i in keys(domination_matrix)], by= x -> model_prediction_data[x]["num_correct"])
-    model_names_labelled = [uppercasefirst(i) for i in model_names]
+    model_names_labelled = [uppercasefirst(get_label(i)) for i in model_names]
 
     for (i, model_name) in enumerate(model_names)
         for (j, model_name2) in enumerate(model_names)
@@ -129,6 +139,7 @@ function plot_inneighborhood(model_prediction_data, plots_folder)
         x = [i for i in keys(model_prediction_data[model]["mistaken_inneighborhood"])]
         y = [model_prediction_data[model]["mistaken_inneighborhood"][i] for i in x]
 
+		model_label = uppercasefirst(get_label(model))
 
 
         if occursin("early", model)
@@ -137,14 +148,14 @@ function plot_inneighborhood(model_prediction_data, plots_folder)
             end
             scatter!(x, y, color="#ffffff", strokecolor=colors_for_model[model_alt],
                 markersize = 15, marker=marker_for_model[model_alt], strokewidth=1,
-                label = uppercasefirst(model))
+                label = uppercasefirst(model_label))
         else
             if occursin("both", model)
                 model = "Country + Cont late"
             end
             scatter!(x, y, color=colors_for_model[model_alt], 
                     marker=marker_for_model[model_alt], markersize = 15, 
-                    label = uppercasefirst(model))
+                    label = uppercasefirst(model_label))
         end
         counter += 1
     end

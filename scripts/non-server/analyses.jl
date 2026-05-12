@@ -13,6 +13,15 @@ finally
     using ArgParse
 end
 
+function get_label(m)
+	m = replace(m, "late" => "(L)")
+	m = replace(m, "early" => "(E)")
+	m = replace(m, "sh" => "SH")
+	m = replace(m, "both" => "Geo_both")
+	m = replace(m, "continent" => "Geo_continent")
+	m = replace(m, "country" => "Geo_country")
+	return m
+end
 
 function create_movement_heatmap(model_prediction_data, plots_folder)
     #=
@@ -25,7 +34,7 @@ function create_movement_heatmap(model_prediction_data, plots_folder)
 
     model_names = sort!([i for i in keys(model_prediction_data)], by= x -> sum(model_prediction_data[x]["categories"]), rev=true)
     pop!(model_names)
-    model_names_labelled = [uppercasefirst(i) for i in model_names]
+    model_names_labelled = [uppercasefirst(get_label(i)) for i in model_names]
 
 
     for (i, model_name) in enumerate(model_names)
@@ -46,7 +55,7 @@ function create_movement_heatmap(model_prediction_data, plots_folder)
     ax = Axis(fig[1, 1], xticks = (eachindex(movement_options), movement_options), yticks = (eachindex(model_names), model_names_labelled))
     hmap = heatmap!(ax, movement_matrix_static, colormap = :viridis)
     for i in 1:length(movement_options), j in 1:length(model_names)
-        txtcolor = movement_matrix_static[i, j] < 50.0 ? :white : :black
+        txtcolor = movement_matrix_static[i, j] < 60.0 ? :white : :black
         text!(ax, "$(movement_matrix_static[i,j])%", position = (i, j),
             color = txtcolor, align = (:center, :center))
     end
