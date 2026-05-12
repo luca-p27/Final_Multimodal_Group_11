@@ -16,6 +16,16 @@ finally
 	using ArgParse
 end
 
+function get_label_table(m)
+	m = replace(m, "late" => "(L)")
+	m = replace(m, "early" => "(E)")
+	m = replace(m, "sh" => "SH")
+	m = replace(m, "both" => "Geo (Both)")
+	m = replace(m, "continent" => "Geo (Continent)")
+	m = replace(m, "country" => "Geo (Country)")
+	return m
+end
+
 function get_label(m)
 	m = replace(m, "late" => "(L)")
 	m = replace(m, "early" => "(E)")
@@ -230,7 +240,7 @@ function save_textab(model_prediction_data, output_folder)
                 "nr_weakly_component",
                 "density",
                 "num_correct"]
-		model_label = uppercasefirst(get_label(model))
+		model_label = uppercasefirst(get_label_table(model))
 
         str_line = "$(model_label) & " * join([model_prediction_data[model][key] for key in keys], " & ")
         str_line *= raw"\\\\"

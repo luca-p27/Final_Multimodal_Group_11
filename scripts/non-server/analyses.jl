@@ -13,6 +13,17 @@ finally
     using ArgParse
 end
 
+function get_label_table(m)
+	m = replace(m, "late" => "(L)")
+	m = replace(m, "early" => "(E)")
+	m = replace(m, "sh" => "SH")
+	m = replace(m, "both" => "Geo (Both)")
+	m = replace(m, "continent" => "Geo (Continent)")
+	m = replace(m, "country" => "Geo (Country)")
+	return m
+end
+
+
 function get_label(m)
 	m = replace(m, "late" => "(L)")
 	m = replace(m, "early" => "(E)")
@@ -90,7 +101,7 @@ function create_movement_table(model_prediction_data, output_folder)
 
 
    for model in sequence
-		model_label = uppercasefirst(get_label(model))
+		model_label = uppercasefirst(get_label_table(model))
         str_line = "$(model_label) & " * join([get(model_prediction_data[model]["movements"], mov_option, 0) for mov_option in movement_options], " & ")
         str_line *= raw"\\\\"
         str_line = uppercasefirst(str_line)
