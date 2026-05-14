@@ -85,14 +85,14 @@ class ContinuousLateFusionModel(nn.Module):
             nn.Linear(32, geo_hidden),
             nn.ReLU(inplace=True),
         )
-        self.img_head   = _build_classifier(IMG_FEAT_DIM, num_classes)
-        self.geo_head   = _build_classifier(geo_hidden,   num_classes)
+        self.img_head = _build_classifier(IMG_FEAT_DIM, num_classes)
+        self.geo_head = _build_classifier(geo_hidden,   num_classes)
         self.img_weight = img_weight
         self.geo_weight = geo_weight
 
     def forward(self, img: torch.Tensor, geo: torch.Tensor) -> torch.Tensor:
-        img_feat  = self.backbone(img)
-        geo_feat  = self.location_encoder(geo)
+        img_feat = self.backbone(img)
+        geo_feat = self.location_encoder(geo)
         logit_img = self.img_head(img_feat)
         logit_geo = self.geo_head(geo_feat)
         w = self.img_weight + self.geo_weight
@@ -116,9 +116,9 @@ class DiscreteEarlyFusionModel(nn.Module):
 
     def __init__(self, num_classes: int, geo_encoder: nn.Module):
         super().__init__()
-        self.backbone    = _build_resnet50()
+        self.backbone = _build_resnet50()
         self.geo_encoder = geo_encoder
-        self.classifier  = _build_classifier(IMG_FEAT_DIM + geo_encoder.out_dim, num_classes)
+        self.classifier = _build_classifier(IMG_FEAT_DIM + geo_encoder.out_dim, num_classes)
 
     def forward(self, img: torch.Tensor, geo: torch.Tensor) -> torch.Tensor:
         img_feat = self.backbone(img)
@@ -143,16 +143,16 @@ class DiscreteLateFusionModel(nn.Module):
     def __init__(self, num_classes: int, geo_encoder: nn.Module,
                  img_weight: float = 1.0, geo_weight: float = 1.0):
         super().__init__()
-        self.backbone    = _build_resnet50()
+        self.backbone = _build_resnet50()
         self.geo_encoder = geo_encoder
-        self.img_head    = _build_classifier(IMG_FEAT_DIM,          num_classes)
-        self.geo_head    = _build_classifier(geo_encoder.out_dim,   num_classes)
-        self.img_weight  = img_weight
-        self.geo_weight  = geo_weight
+        self.img_head = _build_classifier(IMG_FEAT_DIM,          num_classes)
+        self.geo_head = _build_classifier(geo_encoder.out_dim,   num_classes)
+        self.img_weight = img_weight
+        self.geo_weight = geo_weight
 
     def forward(self, img: torch.Tensor, geo: torch.Tensor) -> torch.Tensor:
-        img_feat  = self.backbone(img)
-        geo_feat  = self.geo_encoder(geo[:, 0], geo[:, 1])
+        img_feat = self.backbone(img)
+        geo_feat = self.geo_encoder(geo[:, 0], geo[:, 1])
         logit_img = self.img_head(img_feat)
         logit_geo = self.geo_head(geo_feat)
         w = self.img_weight + self.geo_weight
@@ -175,16 +175,16 @@ class DiscreteBaseline(nn.Module):
     def __init__(self, num_classes: int, geo_encoder: nn.Module,
                  img_weight: float = 1.0, geo_weight: float = 0.0):
         super().__init__()
-        self.backbone    = _build_resnet50()
+        self.backbone = _build_resnet50()
         self.geo_encoder = geo_encoder
-        self.img_head    = _build_classifier(IMG_FEAT_DIM,          num_classes)
-        self.geo_head    = _build_classifier(geo_encoder.out_dim,   num_classes)
-        self.img_weight  = img_weight
-        self.geo_weight  = geo_weight
+        self.img_head = _build_classifier(IMG_FEAT_DIM,          num_classes)
+        self.geo_head = _build_classifier(geo_encoder.out_dim,   num_classes)
+        self.img_weight = img_weight
+        self.geo_weight = geo_weight
 
     def forward(self, img: torch.Tensor, geo: torch.Tensor) -> torch.Tensor:
-        img_feat  = self.backbone(img)
-        geo_feat  = self.geo_encoder(geo[:, 0], geo[:, 1])
+        img_feat = self.backbone(img)
+        geo_feat = self.geo_encoder(geo[:, 0], geo[:, 1])
         logit_img = self.img_head(img_feat)
         logit_geo = self.geo_head(geo_feat)
         return (self.img_weight * logit_img) / self.img_weight
@@ -203,11 +203,11 @@ def build_model(encoder_type: str, fusion_type: str, num_classes: int,
     Return the right model for a given encoder x fusion combination.
 
     Args:
-        encoder_type : 'wrap', 'raw', 'sh', 'hex', or 'geo_label'
-        fusion_type  : 'early' or 'late'
-        num_classes  : number of output species classes
-        geo_dim      : output dim of a continuous encoder (required for wrap/raw/sh)
-        geo_encoder  : HexGridEncoder or GeoLabelEncoder instance (required for hex/geo_label)
+        encoder_type: 'wrap', 'raw', 'sh', 'hex', or 'geo_label'
+        fusion_type: 'early' or 'late'
+        num_classes: number of output species classes
+        geo_dim: output dim of a continuous encoder (required for wrap/raw/sh)
+        geo_encoder: HexGridEncoder or GeoLabelEncoder instance (required for hex/geo_label)
     """
     if encoder_type in CONTINUOUS_ENCODERS:
         if geo_dim is None:

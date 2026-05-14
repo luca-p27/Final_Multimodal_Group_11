@@ -110,7 +110,7 @@ def main():
 
     # always write/overwrite the mapping so it includes everything downloaded so far
     mapping = pd.DataFrame({
-        'url':        all_urls,
+        'url': all_urls,
         'local_path': [str(out_dir / url_to_filename(u)) for u in all_urls],
     })
     # only keep rows where the file actually exists

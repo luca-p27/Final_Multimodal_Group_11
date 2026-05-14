@@ -176,7 +176,6 @@ def build_gains_df(avail, occ):
     return df
 
 # Helper for plot (kernal-density)
-
 def _draw_stacked_kde(ax_top, ax_bot, model_list, avail, xr, highlight=None, show_legend=True):
 
     for mname in model_list:
@@ -216,7 +215,6 @@ def _draw_stacked_kde(ax_top, ax_bot, model_list, avail, xr, highlight=None, sho
         ax_top.legend(fontsize=6, loc="upper left", framealpha=0.75, handlelength=1.6, labelspacing=0.25, ncol=1)
 
 # FIG 1 
-
 def main_fig1_overview(results_df, out="figures/main/fig1_model_overview.png"):
     df = results_df.sort_values("macro_f1", ascending=True).reset_index(drop=True)
     fig, ax = plt.subplots(figsize=(5.5, 3.5))
@@ -346,7 +344,7 @@ def main_fig3_cryptic(gains_df, out="figures/main/fig3_cryptic_analysis.png"):
     fig.subplots_adjust(wspace=0.38)
     rng = np.random.default_rng(42)
 
-    # ── Panel A: Cleveland dot plot ───────────────────────────────────────────
+    # Panel A: Cleveland dot plot 
     ax = axes[0]
     taxon_order = (gains_df.groupby("taxon")["f1_gain"].median().sort_values(ascending=True).index.tolist())
 
@@ -401,16 +399,11 @@ def main_fig3_cryptic(gains_df, out="figures/main/fig3_cryptic_analysis.png"):
     ax.text(0.96, 0.06, "worsened", fontsize=7, color="#d62728", transform=ax.transAxes, va="bottom", ha="right")
 
     pct2 = (gains_df["f1_geo"] > gains_df["f1_base"]).mean() * 100
-    #ax.text(0.04, 0.04, f"{pct2:.0f}% above diagonal",
-    #        fontsize=7, transform=ax.transAxes, va="bottom",
-    #        bbox=dict(boxstyle="round,pad=0.25", fc="white",
-    #                  ec="#ccc", lw=0.5, alpha=0.9))
+
     for sz_label, sz_val in [(f"min ({int(cgs_min)})", cgs_min), (f"max ({int(cgs_max)})", cgs_max)]:
         s_pt = 20 + (sz_val - cgs_min) / max(cgs_max - cgs_min, 1) * 140
         ax.scatter([], [], c="#888", s=s_pt, alpha=0.70, linewidths=0, label=f"group size {sz_label}")
-    #ax.legend(fontsize=6.5, loc="lower right", framealpha=0.8,
-    #          edgecolor="#ddd", title="Cryptic group\nsize (in dataset)",
-    #          title_fontsize=6, handletextpad=0.5)
+    
 
     ax.set_xlabel("F1 — Baseline", fontsize=8)
     ax.set_ylabel(f"F1 — {BEST_GEO}", fontsize=8)

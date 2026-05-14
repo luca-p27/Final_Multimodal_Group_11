@@ -30,13 +30,13 @@ def train_one_epoch(model, loader, optimizer, criterion, device):
         imgs, geos, labels = imgs.to(device), geos.to(device), labels.to(device)
         optimizer.zero_grad()
         outputs = model(imgs, geos)
-        loss    = criterion(outputs, labels)
+        loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
 
         total_loss += loss.item()
         _, predicted = outputs.max(1)
-        total   += labels.size(0)
+        total += labels.size(0)
         correct += predicted.eq(labels).sum().item()
         bar.set_postfix(loss=f'{loss.item():.4f}')
     return total_loss / len(loader), 100.0 * correct / total
@@ -63,12 +63,12 @@ def evaluate(model, loader, criterion, device):
         imgs, geos, labels = batch
         imgs, geos, labels = imgs.to(device), geos.to(device), labels.to(device)
         outputs = model(imgs, geos)
-        loss    = criterion(outputs, labels)
+        loss = criterion(outputs, labels)
 
         total_loss += loss.item()
         probs = torch.softmax(outputs, dim=1)
         _, predicted = outputs.max(1)
-        total   += labels.size(0)
+        total += labels.size(0)
         correct += predicted.eq(labels).sum().item()
         all_preds.extend(predicted.cpu().numpy())
         all_labels.extend(labels.cpu().numpy())
@@ -88,15 +88,15 @@ def fit(model, train_loader, val_loader, optimizer, scheduler,
     Full training loop with early stopping and best-model checkpointing.
 
     Args:
-        model        : nn.Module (or nn.DataParallel wrapper)
-        train_loader : training DataLoader
-        val_loader   : validation DataLoader
-        optimizer    : AdamW (or any torch optimizer)
-        scheduler    : LR scheduler (called once per epoch)
-        epochs       : maximum number of epochs
-        device       : torch.device
-        save_path    : file path where the best model state dict is saved
-        patience     : stop after this many epochs without val improvement
+        model: nn.Module (or nn.DataParallel wrapper)
+        train_loader: training DataLoader
+        val_loader: validation DataLoader
+        optimizer: AdamW (or any torch optimizer)
+        scheduler: LR scheduler (called once per epoch)
+        epochs: maximum number of epochs
+        device: torch.device
+        save_path: file path where the best model state dict is saved
+        patience: stop after this many epochs without val improvement
 
     Returns:
         best_val_acc (float, %)
@@ -116,7 +116,7 @@ def fit(model, train_loader, val_loader, optimizer, scheduler,
 
         if vl_acc > best_val_acc:
             best_val_acc = vl_acc
-            best_state   = copy.deepcopy(model.state_dict())
+            best_state = copy.deepcopy(model.state_dict())
             torch.save(best_state, save_path)
             print(f"  new best: val={vl_acc:.2f}%")
             no_improve = 0

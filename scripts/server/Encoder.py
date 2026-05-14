@@ -167,13 +167,13 @@ class GeoLabelEncoder(nn.Module):
         super().__init__()
         if mode not in self.MODES:
             raise ValueError(f"mode must be one of {self.MODES}, got '{mode}'")
-        self.mode    = mode
+        self.mode = mode
         self.emb_dim = emb_dim
-        concat_dim   = emb_dim * (2 if mode == 'both' else 1)
+        concat_dim = emb_dim * (2 if mode == 'both' else 1)
         self.out_dim = concat_dim
 
         if mode in ('country', 'both'):
-            self.country_emb   = nn.Embedding(country_vocab_size,   emb_dim, padding_idx=0)
+            self.country_emb = nn.Embedding(country_vocab_size,   emb_dim, padding_idx=0)
         if mode in ('continent', 'both'):
             self.continent_emb = nn.Embedding(continent_vocab_size, emb_dim, padding_idx=0)
 
@@ -211,8 +211,8 @@ class GeoLabelEncoder(nn.Module):
 # Encoder registry
 
 CONTINUOUS_ENCODERS = {'wrap', 'raw', 'sh'}
-DISCRETE_ENCODERS   = {'hex', 'geo_label'}
-ALL_ENCODER_NAMES   = sorted(CONTINUOUS_ENCODERS | DISCRETE_ENCODERS)
+DISCRETE_ENCODERS = {'hex', 'geo_label'}
+ALL_ENCODER_NAMES = sorted(CONTINUOUS_ENCODERS | DISCRETE_ENCODERS)
 
 
 def build_continuous_encoder(name: str):

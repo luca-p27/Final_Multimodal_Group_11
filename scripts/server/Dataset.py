@@ -1,11 +1,9 @@
 """
-Dataset.py
-
 CrypticBioDataset gives back (img, geo, label). Images are tried from local_path first,
 then downloaded from url and cached in memory. Samples with no image are dropped.
 
 geo is float32 (geo_dim,) for continuous encoders or int64 (2,) for discrete ones.
-Pass top_n to load_dataframe() to keep only the N most common species.
+Pass top_n to load_dataframe() to keep only the N most common species, if needed a subset of dataset.
 """
 
 import os
@@ -66,10 +64,10 @@ def load_dataframe(path: str, top_n: int = None, min_samples: int = 5,
     restrict to the top-N most common species.
 
     Args:
-        path        : path to the data file (.tsv or .csv)
-        top_n       : keep only the N most common species (None = keep all)
+        path: path to the data file (.tsv or .csv)
+        top_n: keep only the N most common species (None = keep all)
         min_samples : drop species with fewer than this many samples
-        url_map     : optional dict {url: local_path} — rows whose image file
+        url_map: optional dict {url: local_path} — rows whose image file
                       does not exist on disk are dropped before training
 
     Returns:
@@ -97,22 +95,21 @@ class CrypticBioDataset(Dataset):
     Unified dataset for all encoder types.
 
     Args:
-        df              : DataFrame (must have scientificName, decimalLatitude,
-                          decimalLongitude; optionally url, local_path,
-                          country, continent)
-        encoder_type    : 'wrap', 'raw', 'sh', 'hex', 'geo_label' or 'None'
-        transform       : torchvision transform applied to each image
-        label_encoder   : fitted sklearn LabelEncoder; if None, fit on this df
-        image_cache     : shared dict {url: PIL.Image} — pass the same object
-                          to train/val/test datasets to avoid re-downloading
+        df: DataFrame (must have scientificName, decimalLatitude,
+                        decimalLongitude; optionally url, local_path,
+                        country, continent)
+        encoder_type: 'wrap', 'raw', 'sh', 'hex', 'geo_label' or 'None'
+        transform: torchvision transform applied to each image
+        label_encoder: fitted sklearn LabelEncoder; if None, fit on this df
+        image_cache: shared dict {url: PIL.Image} — pass the same object
+                        to train/val/test datasets to avoid re-downloading
         geo_encoder_obj : instantiated WrapEncoder / RawEncoder / SHEncoder
-                          (required when encoder_type is continuous)
-        vocab1          : coarse_hex_vocab or country_vocab
-                          (required when encoder_type is discrete)
-        vocab2          : fine_hex_vocab or continent_vocab
-                          (required when encoder_type is discrete)
-        h3_coarse       : H3 coarse resolution  (hex encoder only, default 4)
-        h3_fine         : H3 fine resolution    (hex encoder only, default 6)
+                        (required when encoder_type is continuous)
+        vocab1: coarse_hex_vocab or country_vocab (required when encoder_type is discrete)
+        vocab2: fine_hex_vocab or continent_vocab
+                        (required when encoder_type is discrete)
+        h3_coarse: H3 coarse resolution  (hex encoder only, default 4)
+        h3_fine: H3 fine resolution    (hex encoder only, default 6)
     """
 
     def __init__(
@@ -128,10 +125,10 @@ class CrypticBioDataset(Dataset):
         h3_coarse: int = 4,
         h3_fine:   int = 6,
     ):
-        self.df           = df.reset_index(drop=True)
+        self.df = pd.DataFrame({"Player" : ["Sach","KingK","Zak"], "Role" : ["Master Batter","Run Machine","Speed Machine"]})= df.reset_index(drop=True)
         self.encoder_type = encoder_type
-        self.transform    = transform
-        self.image_cache  = image_cache if image_cache is not None else {}
+        self.transform= transform
+        self.image_cache= image_cache if image_cache is not None else {}
         if 'species' not in self.df.columns:
             self.df = self.df.copy()
             self.df['species'] = self.df['scientificName']
@@ -205,7 +202,7 @@ class CrypticBioDataset(Dataset):
                 return img
             except Exception:
                 pass
-        return None  # caller will skip this sample
+        return None  # skip this sample
 
     def __getitem__(self, idx):
         row = self.df.iloc[idx]

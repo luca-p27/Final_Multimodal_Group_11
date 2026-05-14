@@ -1,6 +1,4 @@
 """
-add_continent.py
-
 Adds a continent column to a TSV by looking up each row's country name.
 Handles a small set of edge-case country names that pycountry_convert
 does not recognise out of the box.
@@ -52,8 +50,9 @@ def change_file_per_line(input_filename, output_filename):
 def parse_arguments():
     usage = """
     Adds continent data to each data row in a .tsv datafile
+    
     Usage:
-    python %(prog)s --input-file <input_file> --output-file <output_file>
+        python %(prog)s --input-file <input_file> --output-file <output_file>
     """
     parser = argparse.ArgumentParser(
         description=f"{usage}",
