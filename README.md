@@ -56,7 +56,7 @@ pip install tqdm requests
 
 ### Optional: Julia Installation (for Graph Analysis)
 
-Install Julia from https://julialang.org and add the Makie package:
+Install Julia from https://julialang.org and add the Makie package (inside of Julia):
 
 ```julia
 using Pkg; Pkg.add("Makie")
@@ -228,7 +228,7 @@ And everything should run accordingly
 Same requirements needed as before, except for Julia, which can be omitted.
 
 make sure that `scripts/server/Snakefile` 
-- has the correct path for `main_folder`, which is the folder in which everything from the project is stored, i.e. it should end with /final_multimodal_group_11/.
+- has the correct path for `main_folder`, which is the folder in which everything from the project is stored, i.e. it should end with /final_multimodal_group_10/.
 - has a correct filepath to the loaded environment that can be activated in the `environment_path` variable.
 - Points to a valid GPU in the `CUDA_VISIBLE_DEVICES=0` command which is used, verify using `btop` in the shell which GPU's are available.
 
